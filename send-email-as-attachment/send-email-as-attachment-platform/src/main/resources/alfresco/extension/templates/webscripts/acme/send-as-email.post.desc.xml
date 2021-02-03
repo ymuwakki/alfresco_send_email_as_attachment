@@ -1,0 +1,19 @@
+<webscript>
+   <shortname>Send As Email</shortname>
+   <description>Send As Email
+   Request Body:
+   {
+     "to": "email@somewhere.com",
+     "cc": "email@somewhere.com",
+     "from": "username",
+     "subject": "subject",
+     "message": "message"
+   }
+   </description>
+   <url>/acme/send-as-email</url>
+   <url>/slingshot/acme/send-as-email</url>
+   <format default="json">argument</format>
+   <authentication>user</authentication>
+   <transaction>required</transaction>
+   <family>ACME</family>
+</webscript>

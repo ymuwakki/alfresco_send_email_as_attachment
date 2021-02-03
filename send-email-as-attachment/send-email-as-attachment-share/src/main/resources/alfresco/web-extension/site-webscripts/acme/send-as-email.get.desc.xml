@@ -1,0 +1,10 @@
+<webscript>
+  <shortname>send-as-email</shortname>
+  <description>Send As Email</description>
+  <url>/modules/documentlibrary/send-as-email</url>
+  <family>ACME</family>
+  <cache>
+    <never>false</never>
+    <mustrevalidate/>
+  </cache>
+</webscript>

@@ -1,0 +1,50 @@
+<extension>
+	<modules>
+		<module>
+			<id>ACME Actions</id>
+			<version>1.0</version>
+			<auto-deploy>true</auto-deploy>
+			<configurations>
+				<config evaluator="string-compare" condition="DocLibCustom">
+					<dependencies>
+						<js src="acme/actions/send-as-email-action.js" />
+						<js src="acme/modules/send-as-email.js" />
+					</dependencies>
+				</config>
+				<!-- Document Library Actions config section -->
+				<config evaluator="string-compare" condition="DocLibActions">
+
+					<!-- Action definitions -->
+					<actions>
+						<!-- Transform Image -->
+						<action id="send-as-email" type="javascript"
+							label="actions.acme.send-as-email"  icon="msg">
+							<param name="function">onActionSendAsEmail</param>
+							<!-- Additional parameters for onFormDialog function -->
+							<param name="action">send-as-email</param>
+							<param name="successMessage">actions.acme.send-as-email.success</param>
+							<param name="failureMessage">actions.acme.send-as-email.failure</param>
+						</action>
+				
+					</actions>
+					<!-- Action Group resolver - decides which action group id to use for 
+						a node -->
+					<actionGroupResolver>resolver.doclib.actionGroup
+					</actionGroupResolver>
+
+					<!-- Action Group definitions -->
+					<actionGroups>
+						<actionGroup id="document-browse">
+							<action index="330" id="send-as-email" />
+						</actionGroup>
+
+						<actionGroup id="document-details">
+							<action index="50" id="send-as-email" subgroup="50"/>
+						</actionGroup>
+
+					</actionGroups>
+				</config>
+			</configurations>
+		</module>
+	</modules>
+</extension>

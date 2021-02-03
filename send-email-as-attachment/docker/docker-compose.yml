@@ -1,0 +1,65 @@
+version: '3.4'
+services:
+  fakesmtp:
+    image: digiplant/fake-smtp
+    ports: 
+      - "2525:25"
+    volumes:
+      - ~/email:/var/mail
+  send-email-as-attachment-share:
+    image: alfresco-share-send-email-as-attachment:development
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../../send-email-as-attachment-share-docker/target
+    environment:
+      CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
+      REPO_HOST: send-email-as-attachment-acs
+      REPO_PORT: 8080
+    ports:
+      - "${share.port}:8080"
+      - "${share.debug.port}:8888"
+  send-email-as-attachment-acs:
+    image: alfresco-content-services-send-email-as-attachment:development
+    build:
+      dockerfile: ./Dockerfile
+      context: ../../../send-email-as-attachment-platform-docker/target
+    environment:
+      CATALINA_OPTS: "-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=0.0.0.0:8888"
+    ports:
+      - "${acs.port}:8080"
+      - "${acs.debug.port}:8888"
+    volumes:
+      - send-email-as-attachment-acs-volume:/usr/local/tomcat/alf_data
+    depends_on:
+      - send-email-as-attachment-postgres
+  send-email-as-attachment-postgres:
+    image: postgres:9.6
+    environment:
+      POSTGRES_DB: alfresco
+      POSTGRES_USER: alfresco
+      POSTGRES_PASSWORD: alfresco
+    command: postgres -c max_connections=300 -c log_min_messages=LOG
+    ports:
+      - "${postgres.port}:5432"
+    volumes:
+      - send-email-as-attachment-db-volume:/var/lib/postgresql/data
+  send-email-as-attachment-ass:
+    image: alfresco/alfresco-search-services:1.2.0
+    environment:
+      SOLR_ALFRESCO_HOST: send-email-as-attachment-acs
+      SOLR_ALFRESCO_PORT: 8080
+      SOLR_SOLR_HOST: send-email-as-attachment-ass
+      SOLR_SOLR_PORT: 8983
+      SOLR_CREATE_ALFRESCO_DEFAULTS: alfresco,archive
+    ports:
+      - "8983:8983"
+    volumes:
+      - send-email-as-attachment-ass-volume:/opt/alfresco-search-services/contentstore
+      - send-email-as-attachment-ass-volume:/opt/alfresco-search-services/data
+volumes:
+  send-email-as-attachment-acs-volume:
+    external: true
+  send-email-as-attachment-db-volume:
+    external: true
+  send-email-as-attachment-ass-volume:
+    external: true
