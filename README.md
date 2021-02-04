@@ -37,7 +37,6 @@ docker run -d --name fakesmtp -p 2525:25 -v /tmp/fakemail:/var/mail digiplant/fa
 
 And the ./send-email-as-attachment-platform-docker/src/main/docker/alfresco-global.properties was updated to include:
 
-# outbound email to localhost
 mail.host=localhost
 mail.port=2525
 mail.from.default=alfresco@localhost.com
