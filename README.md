@@ -26,10 +26,19 @@ src/main/resources/alfresco/web-extension/site-webscripts/acme/send-as-email.get
 src/main/resources/alfresco/web-extension/site-webscripts/acme/send-as-email.get.properties
 src/main/resources/META-INF/resources/components/documentlibrary/actions/msg-16.png
 
-Also the following pom.xml files were updated to use AMP installation vs jar.  Share requires the AMP. 
+Also the following pom.xml files were updated to use AMP installation vs jar.  Share requires the AMP.
+
 ./pom.xml
 ./send-email-as-attachment-share/pom.xml
 ./send-email-as-attachment-share-docker/pom.xml
 
 The code uses a fake SMTP server:
 docker run -d --name fakesmtp -p 2525:25 -v /tmp/fakemail:/var/mail digiplant/fake-smtp
+
+And the ./send-email-as-attachment-platform-docker/src/main/docker/alfresco-global.properties was updated to include:
+
+# outbound email to localhost
+mail.host=localhost
+mail.port=2525
+mail.from.default=alfresco@localhost.com
+mail.encoding=UTF-8
